@@ -5,23 +5,27 @@
 
 <!-- badges: start -->
 
+<a href = "https://CRAN.R-project.org/package=quartabs" target = "_blank"><img src="https://www.r-pkg.org/badges/version/quartabs"></a>
 [![R-CMD-check](https://github.com/sayuks/quartabs/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sayuks/quartabs/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/sayuks/quartabs/graph/badge.svg)](https://app.codecov.io/gh/sayuks/quartabs)
 [![lint.yaml](https://github.com/sayuks/quartabs/actions/workflows/lint.yaml/badge.svg)](https://github.com/sayuks/quartabs/actions/workflows/lint.yaml)
+<a href = "https://sayuks.github.io/quartabs/" target = "_blank"><img src="https://cranlogs.r-pkg.org/badges/quartabs"></a>
 <!-- badges: end -->
 
-Dynamically Generate [Tabset
+The `quartabs` is an R package that dynamically generates [Tabset
 Panels](https://quarto.org/docs/output-formats/html-basics.html#tabsets)
-in Quarto HTML Documents.
+in Quarto HTML documents.
 
 ## Installation
+
+You can install `quartabs` from CRAN:
 
 ``` r
 install.packages("quartabs")
 ```
 
-You can install the development version of quartabs from
+You can install the development version of `quartabs` from
 [GitHub](https://github.com/) with:
 
 ``` r
