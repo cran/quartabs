@@ -1,3 +1,19 @@
+# quartabs 0.2.0
+
+## New features
+
+* `render_tabset()` gains an `active` argument to choose the tab shown by default (Quarto's `.active` class, Quarto 1.7 or later). Each tabset column takes a value, or a function such as `max` that picks the active tab under each parent tab (#4).
+
+## Minor improvements
+
+* Removed `{stats}` from Imports; quartabs no longer imports any packages.
+* Documented that the tab order of `render_tabset()` can be controlled by factor levels, e.g. `factor(x, levels = unique(x))` to keep the order of first appearance, with an example in the [Get started](https://sayuks.github.io/quartabs/vignettes/get_started.html) (#5).
+* Documented that `render_tabset()` cannot place plots inside tab panels when the chunk label starts with `fig-`, and added an example of cross-referenceable figures in each tab to the [Get started](https://sayuks.github.io/quartabs/vignettes/get_started.html) (#6).
+
+## Bug fixes
+
+* `render_tabset()` no longer merges nested tabsets whose parent tabs differ but read the same when joined with `"_"`, such as `("a", "b_c")` and `("a_b", "c")`. As a result, a tabset column with missing values may now also contain the string `"__####_THIS_IS_A_PLACE_HOLDER_FOR_MISSING_VALUE_####__"`, which used to raise an error (#11).
+
 # quartabs 0.1.1
 
 ## Breaking changes

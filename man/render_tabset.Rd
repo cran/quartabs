@@ -10,6 +10,7 @@ render_tabset(
   output_vars,
   layout = NULL,
   heading_levels = NULL,
+  active = NULL,
   pills = FALSE,
   tabset_width = "default"
 )
@@ -50,6 +51,29 @@ it is preferable to gradually increase the level, as in 1, 2 and 3.
 }
 }}
 
+\item{active}{\code{NULL} or a named list that chooses the active tab, the tab
+shown by default when the page loads (Quarto's \code{.active} class, which
+requires Quarto 1.7 or later; older versions ignore it). Each name is a
+column specified in \code{tabset_vars}, and each element is either:
+\itemize{
+\item A single non-missing value: the tab with this value is active in every
+tabset of that column that contains it. It is an error if no tab of
+that column has this value.
+\item A function: it is called once per tabset of that column (that is, for
+the sibling tabs under each parent tab) with the unique tab values in
+display order, and must return one of them, or \code{NA} for no active tab.
+For example, \code{max} makes the latest tab active under each parent tab,
+and \code{function(x) x[length(x)]} the last one.
+}
+
+Functions are applied before the conversion of factor, Date and POSIXt
+columns to character, so numbers are compared as numbers and factors
+keep their levels. A character value is compared with the tab labels
+(e.g. \code{"2024-01-01"} for a Date tab); other values are compared with the
+original column (e.g. \code{as.Date("2024-01-01")}). Without an active tab, a tabset
+shows its first tab. Columns displayed as headings by \code{heading_levels}
+cannot be specified.}
+
 \item{pills}{Logical, use pills or not.
 See \url{https://getbootstrap.com/docs/5.2/components/navs-tabs/#pills}
 for details. If \code{heading_levels} is specified, this will be ignored.}
@@ -76,7 +100,13 @@ See \href{https://sayuks.github.io/quartabs/vignettes/get_started.html}{Get star
 \item If multiple \code{tabset_vars} are given, create nested tabsets.
 \item For columns specified in \code{output_vars}, columns of type list are output with
 \code{\link[=print]{print()}} and normal columns are output with \code{\link[=cat]{cat()}}.
-\item The \code{data} is sorted internally by \code{tabset_vars}.
+\item The \code{data} is sorted internally by \code{tabset_vars}, so tabs are displayed
+in ascending order. Factor columns are sorted by their levels (before
+the conversion to character described below), so the tab order can be
+controlled with the levels. For example,
+\code{factor(x, levels = unique(x))} keeps the order of first appearance in
+the data. Since levels apply to the whole column, nested tabs cannot have
+a different order under each parent tab.
 \item If \code{tabset_vars} or \code{output_vars} have "factor", "Date" and "POSIXt"
 columns, they are converted internally to character. This is to prevent it
 being displayed as numeric when \code{\link[=cat]{cat()}} is executed.
@@ -105,6 +135,11 @@ such as "difftime", "ts", .etc.
 \item When specifying a list-type column that includes ggplot objects in
 \code{output_vars}, setting the chunk option \code{echo: fenced} may cause
 the plots to not display correctly.
+\item If the chunk label starts with \verb{fig-} (e.g. \verb{#| label: fig-example}),
+Quarto holds all plots until the end of the chunk, so they are displayed
+below the tabset instead of inside each tab panel. Use a label that does
+not start with \verb{fig-}, or no label. To make each plot a
+cross-referenceable figure, see the Get started for details.
 }
 }
 
@@ -140,6 +175,14 @@ render_tabset(
   value1,
   heading_levels = c(2, 3)
 )
+
+# Show tab "B" and, under each tab, the last nested tab by default
+render_tabset(
+  df,
+  c(group1, group2),
+  value1,
+  active = list(group1 = "B", group2 = max)
+)
 }
 \references{
 As this function is focused on quickly and dynamically
@@ -152,7 +195,7 @@ see the following links.
 \item Heiss, Andrew. 2024. “Guide to Generating and Rendering Computational
 Markdown Content Programmatically with Quarto.” November 4, 2024.
 \doi{https://doi.org/10.59350/pa44j-cc302}.
-\item \url{https://bookdown.org/yihui/rmarkdown-cookbook/child-document.html#child-document}
-\item \url{https://bookdown.org/yihui/rmarkdown-cookbook/knit-expand.html}
+\item \url{https://pkg.yihui.org/rmarkdown-cookbook/child-document.html#child-document}
+\item \url{https://pkg.yihui.org/rmarkdown-cookbook/knit-expand.html}
 }
 }
